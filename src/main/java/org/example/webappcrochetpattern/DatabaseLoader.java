@@ -14,12 +14,10 @@ import java.util.ArrayList;
 public class DatabaseLoader implements CommandLineRunner {
 
    private final PatternRepository patternRepository;
-   private final RowRepository rowRepository;
 
    @Autowired
-   public DatabaseLoader(PatternRepository patternRepository, RowRepository rowRepository) {
+   public DatabaseLoader(PatternRepository patternRepository) {
        this.patternRepository = patternRepository;
-       this.rowRepository = rowRepository;
    }
 
     @Override
