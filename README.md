@@ -3,7 +3,7 @@
 ## Overview  
 The **Budget Tracker** frontend is a React-based application that allows users to manage their finances.
 
-This frontend communicates with the Java-based backend, ensuring secure and efficient data management while delivering an intuitive and responsive user experience.
+This frontend communicates with the Java-based backend, ensuring secure and efficient data management with authentication, while providing a responsive user experience.
 
 ## Features  
 - **Budget Management**:  
@@ -31,10 +31,8 @@ This frontend communicates with the Java-based backend, ensuring secure and effi
 4. Access the app in your browser at `http://localhost:3000`.
 
 ## Learn More  
-Expand your knowledge with these resources:  
 - **React.js**: [React Official Documentation](https://react.dev/)  
 - **OAuth2**: [OAuth2 Guide](https://oauth.net/2/)  
-- **Swagger UI**: [Swagger Documentation](https://swagger.io/tools/swagger-ui/)
               
 ## TODO (work in progress)
 - UI view of all expenses [ ]
