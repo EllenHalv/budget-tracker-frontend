@@ -1,31 +1,39 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import ListBudgetComponent from "./components/ListBudgetComponent.jsx";
 import HeaderComponent from "./components/HeaderComponent.jsx";
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import BudgetComponent from "./components/BudgetComponent.jsx";
+import { useAuth } from './context/AuthContext.jsx';
+import LoginComponent from "./components/LoginComponent.jsx";
+
 function App() {
-  const [count, setCount] = useState(0)
+    const { auth } = useAuth(); // Get auth state from context
+
+    console.log("Auth state:", auth);  // Debugging auth state
 
     return (
-    <>
         <BrowserRouter>
             <HeaderComponent />
             <Routes>
-                {/*// http://localhost:3000*/}
-                <Route path={'/'} element={<ListBudgetComponent />}></Route>
-                {/*// http://localhost:3000/budgets*/}
-                <Route path={'/budgets'} element={<ListBudgetComponent />}></Route>
-                {/*// http://localhost:3000/addBudget*/}
-                <Route path={'/addBudget'} element={<BudgetComponent />}></Route>
-                {/*// http://localhost:3000/updateBudget*/}
-                <Route path={'/updateBudget/:id'} element={<BudgetComponent />}></Route>
-                {/*// http://localhost:3000/deleteBudget*/}
-                <Route path={'/deleteBudget/:id'} element={<ListBudgetComponent />}></Route>
+                {/* Public routes */}
+                <Route path="/login" element={auth ? <Navigate to="/" /> : <LoginComponent />} />
+
+                {/* Protected routes */}
+                {auth ? (
+                    <>
+                        <Route path="/" element={<ListBudgetComponent />} />
+                        <Route path="/budgets" element={<ListBudgetComponent />} />
+                        <Route path="/addBudget" element={<BudgetComponent />} />
+                        <Route path="/updateBudget/:id" element={<BudgetComponent />} />
+                        <Route path="/deleteBudget/:id" element={<ListBudgetComponent />} />
+                    </>
+                ) : (
+                    <Route path="*" element={<Navigate to="/login" />} />
+                )}
             </Routes>
         </BrowserRouter>
-    </>
-  )
+    );
 }
 
-export default App
+export default App;

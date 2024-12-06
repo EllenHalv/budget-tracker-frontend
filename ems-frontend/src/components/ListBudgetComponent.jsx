@@ -1,91 +1,77 @@
-import React, {useEffect, useState} from 'react'
-import {deleteBudget, listBudgets} from "../services/BudgetService.js";
-import {useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useAuth } from "../context/AuthContext";
 
 const ListBudgetComponent = () => {
+    const { auth } = useAuth(); // Get auth state (which includes the JWT)
+    const [budgets, setBudgets] = useState([]);
+    const [error, setError] = useState(null); // State for error handling
 
-    const [budgets, setBudgets] = useState([])
-    const navigate = useNavigate();
+    // Log the budgets state whenever it changes
+    useEffect(() => {
+        console.log("Updated Budgets State:", budgets);
+    }, [budgets]);  // Runs whenever the budgets state changes
 
     useEffect(() => {
-        getAllBudgets();
-    }, []);
+        if (auth && auth.token) {
+            // Make API request with JWT token in the Authorization header
+            axios.get(`http://localhost:8080/api/budgets/user/${auth.userId}`, {
+                headers: {
+                    Authorization: `Bearer ${auth.token}`,
+                },
+            })
+                .then((response) => {
+                    console.log("API Response:", response.data); // Log the full API response
 
-    function getAllBudgets() {
-        listBudgets().then((response) => {
-            setBudgets(response.data)
-        }).catch((error) => {
-            console.error(error)
-        })
-    }
-
-    function addNewBudget() {
-        navigate('/addBudget')
-    }
-
-    function updateBudget(id) {
-        navigate(`/updateBudget/${id}`)
-    }
-
-    function removeBudget(id) {
-        console.log(id);
-
-        deleteBudget(id).then((response) => {
-            getAllBudgets();
-        }).catch(error => {
-            console.error(error)
-        })
-    }
+                    // Assuming the response contains the array of budgets directly in response.data
+                    setBudgets(response.data);  // Set the state with the fetched budgets
+                })
+                .catch((error) => {
+                    setError("Error fetching budgets: " + error.message);  // Set error state
+                    console.error("Error fetching budgets:", error);
+                });
+        }
+    }, [auth]); // This effect runs when `auth` changes
 
     return (
         <div>
-            <h2> List of Budgets</h2>
-            <br/> <br/>
-            <button className={'btn btn-primary'} onClick={addNewBudget}
-                    style={{marginLeft: '800px'}}>Add Budget
-            </button>
-            <br/> <br/>
-            {/*<table className={'table table-striped table-bordered'}>*/}
-                <table style={{margin: '0 auto', width: '60%'}} className={'table table-striped table-bordered'}>
+            <h2>Budgets</h2>
+            {error && <p className="error">{error}</p>}  {/* Display error if any */}
+            {budgets.length > 0 ? (
+                <table>
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th style={{width: '200px'}}>Name</th>
+                        <th>Name</th>
                         <th>Amount</th>
-                        <th>Start date</th>
-                        <th>End date</th>
-                        <th style={{width: '100px'}}>Amount spent</th>
-                        <th style={{width: '100px'}}>Remaining amount</th>
-                        <th style={{width: '200px'}}>Actions</th>
-
-
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Remaining Amount</th>
+                        <th>Amount Spent</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {
-                        budgets.map(
-                            budget =>
-                                <tr key={budget.id}>
-                                    <td>{budget.id}</td>
-                                    <td>{budget.name}</td>
-                                    <td>{budget.amount}</td>
-                                    <td>{budget.startDate}</td>
-                                    <td>{budget.endDate}</td>
-                                    <td>{budget.amountSpent}</td>
-                                    <td>{budget.remainingAmount}</td>
-                                    <td>
-                                        <button className={'btn btn-info'} onClick={() => updateBudget(budget.id)}>Update
-                                        </button>
-                                        <button className={'btn btn-danger'} onClick={() => removeBudget(budget.id)}
-                                                style={{marginLeft: '10px'}}>Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                        )
-                    }
+                    {budgets.map((budget) => {
+                        console.log("Rendering budget:", budget);  // Log the individual budget object
+                        console.log("Rendering budget remaining amount:", budget.remainingAmount);  // Log the individual budget object
+
+                        return (
+                            <tr key={budget.id}>
+                                <td>{budget.name}</td>
+                                <td>{budget.amount}</td>
+                                <td>{budget.startDate}</td>
+                                <td>{budget.endDate}</td>
+                                <td>{budget.remainingAmount}</td>
+                                <td>{budget.amountSpent}</td>
+                            </tr>
+                        );
+                    })}
                     </tbody>
                 </table>
+            ) : (
+                <p>No budgets available.</p>
+            )}
         </div>
-    )
-}
-export default ListBudgetComponent
+    );
+};
+
+export default ListBudgetComponent;
