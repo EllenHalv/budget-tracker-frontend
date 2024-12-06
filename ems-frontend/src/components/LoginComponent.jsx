@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext.jsx";
 import axios from "axios";
 
 const LoginComponent = () => {
     const { setAuth } = useAuth();
-    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -13,13 +11,22 @@ const LoginComponent = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/api/login", {
+            const response = await axios.post("http://localhost:8080/api/auth/login", {
                 username,
                 password,
             });
 
-            setAuth({ token: response.data.token, username: response.data.username, userId: response.data.userId });
-            navigate("/"); // Redirect to the home page
+            // Log the response for debugging
+            console.log("Login successful:", response.data);
+
+            // Set auth state after successful login
+            setAuth({
+                token: response.data.jwt,
+                username: response.data.user.username,
+                userId: response.data.user.id });
+
+            // Log out navigation for now, to avoid breaking navigation
+            console.log("Navigating to home...");
         } catch (err) {
             setError("Invalid login credentials");
         }
