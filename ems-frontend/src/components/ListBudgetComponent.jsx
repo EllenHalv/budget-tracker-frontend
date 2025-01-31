@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from "../context/AuthContext";
+import styles from "./ListBudget.module.css";
 
 const ListBudgetComponent = () => {
     const { auth } = useAuth(); // Get auth state (which includes the JWT)
@@ -35,10 +36,12 @@ const ListBudgetComponent = () => {
 
     return (
         <div>
-            <h2>Budgets</h2>
+            <br/>
+            <h2 className={styles.title}>Budgets</h2>
+            <br/>
             {error && <p className="error">{error}</p>}  {/* Display error if any */}
             {budgets.length > 0 ? (
-                <table>
+                <table className={styles.table}>
                     <thead>
                     <tr>
                         <th>Name</th>
@@ -47,6 +50,9 @@ const ListBudgetComponent = () => {
                         <th>End Date</th>
                         <th>Remaining Amount</th>
                         <th>Amount Spent</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -62,6 +68,9 @@ const ListBudgetComponent = () => {
                                 <td>{budget.endDate}</td>
                                 <td>{budget.remainingAmount}</td>
                                 <td>{budget.amountSpent}</td>
+                                <td className={styles.expenseColumn}><button className={styles.expenseButton} onClick={() => console.log("Clicked")}>View Expenses</button></td>
+                                <td className={styles.editColumn}><button className={styles.editButton} onClick={() => console.log("Clicked")}>Edit</button></td>
+                                <td className={styles.deleteColumn}><button className={styles.deleteButton} onClick={() => console.log("Clicked")}>Delete</button></td>
                             </tr>
                         );
                     })}
@@ -70,6 +79,11 @@ const ListBudgetComponent = () => {
             ) : (
                 <p>No budgets available.</p>
             )}
+            <br/>
+            <div>
+                <button className={styles.addButton} onClick={() => console.log("Clicked")}>Add Budget</button>
+            </div>
+            <br/>
         </div>
     );
 };
