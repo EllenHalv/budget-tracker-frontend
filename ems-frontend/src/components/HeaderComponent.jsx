@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate, Link } from "react-router-dom";
+import styles from "./HeaderComponent.module.css";
 
 const HeaderComponent = () => {
     const { auth, setAuth } = useAuth();
@@ -15,8 +16,8 @@ const HeaderComponent = () => {
         <div className={"header-parent"}>
             <header className={"main-header"}>
                 <nav className="navbar navbar-expand-md navbar-dark bg-dark">
-                    <Link className={"navbar-brand"} to="/">Budget Tracker</Link>
-                    <ul className="navbar-nav">
+                    <Link className={styles.navbarBrand} to="/">Budget Tracker</Link>
+                    <ul className={styles.navbarNav}>
                         {auth ? (
                             <>
                                 <li><Link className="nav-link" to="/budgets">Budgets</Link></li>

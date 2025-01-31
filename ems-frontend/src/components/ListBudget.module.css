@@ -1,0 +1,61 @@
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    /*font-family: 'Roboto', sans-serif;*/
+    /*background-color: #f9f9f9;*/
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.title {
+    margin-left: 50px;
+    margin-top: 50px;
+}
+
+.table {
+    margin-left: 50px;
+    max-width: 75vw;
+}
+
+.addButton {
+    margin-left: 50px;
+    margin-top: 20px;
+    background-color: #eaf2d7;
+    border-color: #bcbcbc;
+    border-radius: 10px;
+}
+
+.editButton {
+    background-color: #c7daff;
+    border-color: #bcbcbc;
+    border-radius: 10px;
+    width: 80px;
+
+}
+
+.deleteButton {
+    background-color: #ffbec9;
+    border-color: #bcbcbc;
+    border-radius: 10px;
+    width: 90px;
+}
+
+.expenseButton {
+    background-color: #faebcd;
+    border-color: #bcbcbc;
+    border-radius: 10px;
+    width: 150px;
+}
+
+.editColumn {
+    /*background-color: #1a1a1a;*/
+}
+
+.deleteColumn {
+    /*background-color: #1a1a1a;*/
+}
